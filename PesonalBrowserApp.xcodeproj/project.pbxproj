@@ -13,6 +13,9 @@
 		B2F0A15E288D2B3E00C97D13 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2F0A15C288D2B3E00C97D13 /* Main.storyboard */; };
 		B2F0A160288D2B3F00C97D13 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2F0A15F288D2B3F00C97D13 /* Assets.xcassets */; };
 		B2F0A163288D2B3F00C97D13 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2F0A161288D2B3F00C97D13 /* LaunchScreen.storyboard */; };
+		B2F0A16C288D75C000C97D13 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = B2F0A16B288D75C000C97D13 /* SnapKit */; };
+		B2F0A16E288D8ADE00C97D13 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0A16D288D8ADE00C97D13 /* CustomTabBar.swift */; };
+		B2F0A171288D93F700C97D13 /* Kanna in Frameworks */ = {isa = PBXBuildFile; productRef = B2F0A170288D93F700C97D13 /* Kanna */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,7 @@
 		B2F0A15F288D2B3F00C97D13 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B2F0A162288D2B3F00C97D13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B2F0A164288D2B3F00C97D13 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B2F0A16D288D8ADE00C97D13 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +35,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2F0A171288D93F700C97D13 /* Kanna in Frameworks */,
+				B2F0A16C288D75C000C97D13 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +65,7 @@
 				B2F0A156288D2B3E00C97D13 /* AppDelegate.swift */,
 				B2F0A158288D2B3E00C97D13 /* SceneDelegate.swift */,
 				B2F0A15A288D2B3E00C97D13 /* ViewController.swift */,
+				B2F0A16D288D8ADE00C97D13 /* CustomTabBar.swift */,
 				B2F0A15C288D2B3E00C97D13 /* Main.storyboard */,
 				B2F0A15F288D2B3F00C97D13 /* Assets.xcassets */,
 				B2F0A161288D2B3F00C97D13 /* LaunchScreen.storyboard */,
@@ -83,6 +90,10 @@
 			dependencies = (
 			);
 			name = PesonalBrowserApp;
+			packageProductDependencies = (
+				B2F0A16B288D75C000C97D13 /* SnapKit */,
+				B2F0A170288D93F700C97D13 /* Kanna */,
+			);
 			productName = PesonalBrowserApp;
 			productReference = B2F0A153288D2B3E00C97D13 /* PesonalBrowserApp.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +122,10 @@
 				Base,
 			);
 			mainGroup = B2F0A14A288D2B3E00C97D13;
+			packageReferences = (
+				B2F0A16A288D75C000C97D13 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				B2F0A16F288D93F700C97D13 /* XCRemoteSwiftPackageReference "Kanna" */,
+			);
 			productRefGroup = B2F0A154288D2B3E00C97D13 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -138,6 +153,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2F0A16E288D8ADE00C97D13 /* CustomTabBar.swift in Sources */,
 				B2F0A15B288D2B3E00C97D13 /* ViewController.swift in Sources */,
 				B2F0A157288D2B3E00C97D13 /* AppDelegate.swift in Sources */,
 				B2F0A159288D2B3E00C97D13 /* SceneDelegate.swift in Sources */,
@@ -358,6 +374,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B2F0A16A288D75C000C97D13 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				branch = develop;
+				kind = branch;
+			};
+		};
+		B2F0A16F288D93F700C97D13 /* XCRemoteSwiftPackageReference "Kanna" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tid-kijyun/Kanna.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B2F0A16B288D75C000C97D13 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B2F0A16A288D75C000C97D13 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		B2F0A170288D93F700C97D13 /* Kanna */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B2F0A16F288D93F700C97D13 /* XCRemoteSwiftPackageReference "Kanna" */;
+			productName = Kanna;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B2F0A14B288D2B3E00C97D13 /* Project object */;
 }
