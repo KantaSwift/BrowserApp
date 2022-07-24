@@ -76,7 +76,12 @@ extension ViewController: UISearchBarDelegate {
             $0.top.equalTo(searchBar.snp.bottom)
         }
         
-        
+        Task {
+            guard let suggestion = try? await api.getSuggestions(searchText: searchBar.text ?? "" ) else { return }
+            self.suggest = suggestion
+            tableView.reloadData()
+            //            print(
+        }
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -89,7 +94,7 @@ extension ViewController: UISearchBarDelegate {
             guard let suggestion = try? await api.getSuggestions(searchText: searchText) else { return }
             self.suggest = suggestion
             tableView.reloadData()
-//            print(suggest)
+            //            print(suggest)
         }
     }
 }
@@ -110,8 +115,10 @@ extension ViewController: UITableViewDataSource {
 extension ViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        print(indexPath.row)
+        //        print(indexPath.row)
         search(search: suggest[indexPath.row])
+        searchBar.resignFirstResponder()
+        tableView.removeFromSuperview()
     }
     
 }
@@ -125,7 +132,6 @@ extension ViewController: CustomTabBarDelagate {
         web.goForward()
     }
 }
-
 
 class GoogleSuggestion {
     
