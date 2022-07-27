@@ -14,10 +14,13 @@ class ViewController: UIViewController {
     
     let web = WKWebView()
     let searchBar = UISearchBar(frame: .zero)
+    let progressBar = UIProgressView()
+    var observation: NSKeyValueObservation?
     let tableView = UITableView()
     var suggest = [String]()
     let api = GoogleSuggestion()
     var custom = CustomTabBar()
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,23 +28,51 @@ class ViewController: UIViewController {
         guard let url = URL(string: "https://google.com") else { return }
         let requset = URLRequest(url: url)
         web.load(requset)
-        
+
         layout()
         // Do any additional setup after loading the view.
     }
     
+   
+
     func search(search: String) {
         guard let url = URL(string: "https://www.google.com/search?q=\(search)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) else { return }
         let requset = URLRequest(url: url)
         web.load(requset)
+
+        setupProgress()
+        
+        observation = web.observe(\.estimatedProgress, options: .new){_, change in
+//            print("\(String(describing: change.newValue))")
+            self.progressBar.setProgress(Float(change.newValue!), animated: true)
+            
+            if change.newValue == 1.0 {
+                UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseIn], animations: { self.progressBar.alpha = 0.0 }, completion: { (finished: Bool) in
+                    self.progressBar.setProgress(0.0, animated: true) } )
+            }
+            else {
+                self.progressBar.alpha = 1.0
+            }
+    }
+}
+    
+    func setupProgress( ) {
+        searchBar.addSubview(progressBar)
+        
+        progressBar.snp.makeConstraints{
+            $0.right.left.bottom.equalToSuperview()
+            $0.height.equalTo(5)
+        }
     }
     
     func layout() {
         view.addSubview(web)
         view.addSubview(searchBar)
+        //searchBar.addSubview(progressBar)
         view.addSubview(custom)
+   
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier:"cell")
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
         searchBar.placeholder = "検索/Webサイト名を入力"
         searchBar.delegate = self
@@ -58,6 +89,7 @@ class ViewController: UIViewController {
             $0.left.right.equalTo(view.safeAreaLayoutGuide)
             $0.top.equalTo(searchBar.snp.bottom)
         }
+        
         
         custom.snp.makeConstraints{
             $0.right.left.bottom.equalToSuperview()
@@ -98,6 +130,7 @@ extension ViewController: UISearchBarDelegate {
         }
     }
 }
+
 
 extension ViewController: UITableViewDataSource {
     
