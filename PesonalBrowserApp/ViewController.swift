@@ -12,6 +12,7 @@ import Kanna
 
 class ViewController: UIViewController {
     
+    var collectionView: UICollectionView!
     let web = WKWebView()
     let searchBar = UISearchBar(frame: .zero)
     let progressBar = UIProgressView()
@@ -20,30 +21,77 @@ class ViewController: UIViewController {
     var suggest = [String]()
     let api = GoogleSuggestion()
     var custom = CustomTabBar()
-  
+    let sectionName = [["SNS"],["お買い物"]]
+    let data = [["Yotube","インスタ","Twitter"],["Amazon","楽天","Yahoo"]]
+    
+    lazy var stackView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [searchBar,CancelButton])
+        stack.axis = .horizontal
+        stack.alignment = .fill
+        stack.distribution = .fill
+        return stack
+    }()
+    
+    lazy var CancelButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(cancelButtonDidTap), for: .touchUpInside)
+        button.setTitle("キャンセル", for: .normal)
+        button.setTitleColor(UIColor.black, for: .normal)
+        button.isHidden = true
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let url = URL(string: "https://google.com") else { return }
-        let requset = URLRequest(url: url)
-        web.load(requset)
-
+        setupCollectionView()
         layout()
+        
         // Do any additional setup after loading the view.
     }
     
-   
-
+    func setupCollectionView() {
+        
+        let flowlayout = UICollectionViewFlowLayout()
+        flowlayout.itemSize = CGSize(width: 80, height: 80)
+        flowlayout.minimumInteritemSpacing = 7
+        flowlayout.minimumLineSpacing = 5
+        
+        //        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowlayout)
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowlayout)
+        collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.register(CollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        web.addSubview(collectionView)
+        
+        collectionView.snp.makeConstraints{
+            $0.left.right.top.bottom.equalToSuperview()
+        }
+    }
+    
+    @objc func cancelButtonDidTap() {
+        tableView.removeFromSuperview()
+        UIView.animate(withDuration: 0.1) {
+            self.stackView.arrangedSubviews[1].isHidden.toggle()
+            self.stackView.layoutIfNeeded()
+        }
+        searchBar.resignFirstResponder()
+    }
+    
     func search(search: String) {
         guard let url = URL(string: "https://www.google.com/search?q=\(search)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) else { return }
         let requset = URLRequest(url: url)
         web.load(requset)
-
-        setupProgress()
         
+        setupProgress()
+        reloadObservation()
+        collectionView.removeFromSuperview()
+    }
+    
+    private func reloadObservation() {
         observation = web.observe(\.estimatedProgress, options: .new){_, change in
-//            print("\(String(describing: change.newValue))")
+            //            print("\(String(describing: change.newValue))")
             self.progressBar.setProgress(Float(change.newValue!), animated: true)
             
             if change.newValue == 1.0 {
@@ -53,8 +101,58 @@ class ViewController: UIViewController {
             else {
                 self.progressBar.alpha = 1.0
             }
+        }
     }
-}
+    
+    func setupYoutubeSite() {
+        view.addSubview(web)
+        
+        web.snp.makeConstraints{
+            $0.left.right.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(searchBar.snp.bottom)
+        }
+    }
+    
+    func setupInstagram() {
+        view.addSubview(web)
+        
+        web.snp.makeConstraints{
+            $0.left.right.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(searchBar.snp.bottom)
+        }
+    }
+    
+    func setupTwitter() {
+        view.addSubview(web)
+        web.snp.makeConstraints{
+            $0.left.right.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(searchBar.snp.bottom)
+        }
+    }
+    
+    func setupAmazonSite() {
+        view.addSubview(web)
+        web.snp.makeConstraints{
+            $0.left.right.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(searchBar.snp.bottom)
+        }
+    }
+    
+    func setupRakutenSite() {
+        view.addSubview(web)
+        web.snp.makeConstraints{
+            $0.left.right.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(searchBar.snp.bottom)
+        }
+    }
+    
+    func setupYahooSite() {
+        view.addSubview(web)
+        web.snp.makeConstraints{
+            $0.left.right.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(searchBar.snp.bottom)
+        }
+    }
     
     func setupProgress( ) {
         searchBar.addSubview(progressBar)
@@ -65,14 +163,24 @@ class ViewController: UIViewController {
         }
     }
     
+    private func setupTableView() {
+        view.addSubview(tableView)
+        
+        tableView.snp.makeConstraints{
+            $0.bottom.left.right.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(searchBar.snp.bottom)
+        }
+        
+        self.stackView.arrangedSubviews[1].isHidden.toggle()
+        self.stackView.layoutIfNeeded()
+    }
+    
     func layout() {
         view.addSubview(web)
-        view.addSubview(searchBar)
-        //searchBar.addSubview(progressBar)
         view.addSubview(custom)
-   
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier:"cell")
+        view.addSubview(stackView)
         
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier:"cell")
         
         searchBar.placeholder = "検索/Webサイト名を入力"
         searchBar.delegate = self
@@ -80,7 +188,7 @@ class ViewController: UIViewController {
         tableView.delegate = self
         custom.delegate = self
         
-        searchBar.snp.makeConstraints{
+        stackView.snp.makeConstraints{
             $0.height.equalTo(40)
             $0.right.left.top.equalTo(view.safeAreaLayoutGuide)
         }
@@ -90,9 +198,8 @@ class ViewController: UIViewController {
             $0.top.equalTo(searchBar.snp.bottom)
         }
         
-        
         custom.snp.makeConstraints{
-            $0.right.left.bottom.equalToSuperview()
+            $0.right.left.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.top.equalTo(web.snp.bottom)
         }
     }
@@ -101,33 +208,34 @@ class ViewController: UIViewController {
 extension ViewController: UISearchBarDelegate {
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        view.addSubview(tableView)
-        
-        tableView.snp.makeConstraints{
-            $0.bottom.left.right.equalTo(view.safeAreaLayoutGuide)
-            $0.top.equalTo(searchBar.snp.bottom)
-        }
         
         Task {
             guard let suggestion = try? await api.getSuggestions(searchText: searchBar.text ?? "" ) else { return }
             self.suggest = suggestion
             tableView.reloadData()
-            //            print(
         }
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         search(search: searchBar.text ?? "")
         tableView.removeFromSuperview()
+        UIView.animate(withDuration: 0.1) {
+            self.stackView.arrangedSubviews[1].isHidden.toggle()
+            self.stackView.layoutIfNeeded()
+        }
+        searchBar.resignFirstResponder()
+        
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        setupTableView()
         Task {
             guard let suggestion = try? await api.getSuggestions(searchText: searchText) else { return }
             self.suggest = suggestion
             tableView.reloadData()
             //            print(suggest)
         }
+        tableView.reloadData()
     }
 }
 
@@ -143,6 +251,17 @@ extension ViewController: UITableViewDataSource {
         cell.textLabel?.text = suggest[indexPath.row]
         return cell
     }
+    
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 20))
+        label.textAlignment = .center
+        label.text = "Google検索"
+        label.font = UIFont.italicSystemFont(ofSize: 20)
+        label.isEnabled = true
+        return label
+    }
+    
 }
 
 extension ViewController: UITableViewDelegate {
@@ -156,7 +275,108 @@ extension ViewController: UITableViewDelegate {
     
 }
 
+extension ViewController: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return data[section].count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionViewCell
+        let textName = data[indexPath.section][indexPath.item]
+        cell.setupContent(nameLabel: textName)
+        cell.backgroundColor = .cyan
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! CollectionViewHeader
+        let headerText = sectionName[indexPath.section][indexPath.item]
+        header.setupContent(titleText: headerText)
+        return header
+    }
+}
+
+extension ViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(data[indexPath.section][indexPath.row])
+        if indexPath.section == 0 {
+            if indexPath.row == 0 {
+                setupYoutubeSite()
+                setupProgress()
+                reloadObservation()
+                collectionView.removeFromSuperview()
+                guard let url = URL(string: "https://www.youtube.com/") else { return }
+                let request = URLRequest(url: url)
+                web.load(request)
+            }
+            else if indexPath.row == 1 {
+                setupInstagram()
+                setupProgress()
+                reloadObservation()
+                collectionView.removeFromSuperview()
+                guard let url = URL(string: "https://www.instagram.com/") else { return }
+                let request = URLRequest(url: url)
+                web.load(request)
+            }
+            else {
+                setupTwitter()
+                setupProgress()
+                reloadObservation()
+                collectionView.removeFromSuperview()
+                guard let url = URL(string: "https://twitter.com/") else { return }
+                let request = URLRequest(url: url)
+                web.load(request)
+            }
+        }
+        else {
+            if indexPath.row == 0 {
+                setupAmazonSite()
+                setupProgress()
+                reloadObservation()
+                collectionView.removeFromSuperview()
+                guard let url = URL(string: "https://www.amazon.co.jp/") else { return }
+                let request = URLRequest(url: url)
+                web.load(request)
+            }
+            else if indexPath.row == 1 {
+                setupProgress()
+                reloadObservation()
+                collectionView.removeFromSuperview()
+                guard let url = URL(string: "https://www.rakuten.co.jp/") else { return }
+                let request = URLRequest(url: url)
+                web.load(request)
+            }
+            else {
+                setupProgress()
+                reloadObservation()
+                collectionView.removeFromSuperview()
+                guard let url = URL(string: "https://www.yahoo.co.jp/") else { return }
+                let request = URLRequest(url: url)
+                web.load(request)
+            }
+        }
+    }
+}
+
+extension ViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.width, height: 50)
+    }
+    
+}
+
 extension ViewController: CustomTabBarDelagate {
+    func homeButtonDidTap() {
+        print("タップされました")
+    }
+    
     func backButtonDidTap() {
         web.goBack()
     }

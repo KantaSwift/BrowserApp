@@ -16,6 +16,8 @@
 		B2F0A16C288D75C000C97D13 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = B2F0A16B288D75C000C97D13 /* SnapKit */; };
 		B2F0A16E288D8ADE00C97D13 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0A16D288D8ADE00C97D13 /* CustomTabBar.swift */; };
 		B2F0A171288D93F700C97D13 /* Kanna in Frameworks */ = {isa = PBXBuildFile; productRef = B2F0A170288D93F700C97D13 /* Kanna */; };
+		B2F0A1A2289121DA00C97D13 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0A1A1289121D900C97D13 /* CollectionViewCell.swift */; };
+		B2F0A1A42891284E00C97D13 /* CollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0A1A32891284E00C97D13 /* CollectionViewHeader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		B2F0A162288D2B3F00C97D13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B2F0A164288D2B3F00C97D13 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B2F0A16D288D8ADE00C97D13 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
+		B2F0A1A1289121D900C97D13 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
+		B2F0A1A32891284E00C97D13 /* CollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewHeader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +70,8 @@
 				B2F0A158288D2B3E00C97D13 /* SceneDelegate.swift */,
 				B2F0A15A288D2B3E00C97D13 /* ViewController.swift */,
 				B2F0A16D288D8ADE00C97D13 /* CustomTabBar.swift */,
+				B2F0A1A32891284E00C97D13 /* CollectionViewHeader.swift */,
+				B2F0A1A1289121D900C97D13 /* CollectionViewCell.swift */,
 				B2F0A15C288D2B3E00C97D13 /* Main.storyboard */,
 				B2F0A15F288D2B3F00C97D13 /* Assets.xcassets */,
 				B2F0A161288D2B3F00C97D13 /* LaunchScreen.storyboard */,
@@ -153,6 +159,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2F0A1A2289121DA00C97D13 /* CollectionViewCell.swift in Sources */,
+				B2F0A1A42891284E00C97D13 /* CollectionViewHeader.swift in Sources */,
 				B2F0A16E288D8ADE00C97D13 /* CustomTabBar.swift in Sources */,
 				B2F0A15B288D2B3E00C97D13 /* ViewController.swift in Sources */,
 				B2F0A157288D2B3E00C97D13 /* AppDelegate.swift in Sources */,
